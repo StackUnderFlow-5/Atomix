@@ -1,97 +1,52 @@
 Atomix — Distributed Ledger Module
+
 📌 Overview
+Atomix is a specialized backend engine built to manage financial transactions between accounts while maintaining a strict audit trail. It functions as a "Double-Entry" system that automates the movement of funds and records every transaction in a permanent history table.
 
-A high-concurrency ledger system built for the Atomix ecosystem using:
-
+Built using:
 Java 21 & Spring Boot 3
-
-JPA / Hibernate for persistent audit trails
-
-Pessimistic Locking for thread-safe transfers
-
-Swagger / OpenAPI 3 for interactive documentation
-
-This project implements a robust backend for financial transactions, ensuring absolute data integrity even under heavy concurrent load.
+JPA / Hibernate for data persistence
+Pessimistic Locking for thread-safe operations
+Swagger / OpenAPI 3 for manual API testing
 
 ✨ Features
-
-Concurrent Fund Transfers: Uses database-level locking to prevent race conditions.
-
-Double-Entry Validation: Ensures transaction blocks always balance to zero.
-
-Automated Audit Logging: Every movement of funds is recorded with a debit/credit pair.
-
-Professional Error Mapping: Custom exception hierarchy mapped to HTTP status codes (e.g., 400 for Insufficient Funds).
-
-Interactive API Sandbox: Fully documented REST endpoints via Swagger UI.
+Thread-Safe Transfers: Uses database-level locking verified for concurrent user access.
+Double-Entry Validation: Checks that transaction blocks balance to zero before processing.
+Audit Logging: Generates debit/credit records for every successful movement of funds.
+Error Mapping: Maps logic errors, such as "Insufficient Funds," to clear 400 Bad Request responses.
+API Documentation: Includes an interactive Swagger UI for testing the backend logic.
 
 🧠 Backend Principles Applied
 Concurrency Control
-
-Implemented Pessimistic Write Locking on the Account repository to ensure balance consistency during simultaneous requests.
+Implemented Pessimistic Write Locking to manage simultaneous requests and maintain balance integrity.
 
 Transactional Integrity
+Ensures fund transfers and audit log entries are treated as a single atomic unit using @Transactional.
 
-Utilized Spring's @Transactional to ensure that fund transfers and audit log creations succeed or fail as a single atomic unit.
-
-API Documentation
-
-Integrated Springdoc-OpenAPI to provide a standardized interface for frontend consumption and manual testing.
-
-Clean Exception Handling
-
-Decoupled business logic from HTTP responses using @RestControllerAdvice to maintain clean service layers.
+API Standardization
+Standardized endpoint documentation to simplify manual verification and future frontend integration.
 
 🧠 Design Decisions
 Why Pessimistic Locking?
-
-To ensure that Alice cannot spend the same 100 rupees twice if two requests hit the server at the exact same millisecond.
+To prevent race conditions when multiple requests attempt to update the same account balance at the same time.
 
 Why H2 In-Memory Database?
+Used for rapid prototyping and testing of ledger logic without persistent database overhead.
 
-Chosen for rapid development and testing of the ledger logic without requiring a complex external DB setup.
-
-Why Swagger over Postman?
-
-To provide built-in, live documentation that stays updated automatically as the code changes.
+Why Swagger?
+To provide an easy way to test the logic manually and visualize the API structure.
 
 ▶ How To Run
 Prerequisites
-
 Java 21
-
-Maven (included via mvnw)
+Maven
 
 Steps
-
-Clone repository:
-
-git clone https://github.com/sahil/Atomix.git
-
-
-Run Application:
-
-.\mvnw.cmd spring-boot:run
-
-
-Open Swagger:
-Navigate to
-
-http://localhost:8080/swagger-ui/index.html
-
-
-H2 Console:
-Access
-
-http://localhost:8080/h2-console
-
-
-with JDBC URL
-
-jdbc:h2:mem:ledgerdb
+Clone repository: git clone https://github.com/sahil/Atomix.git
+Run Application: .\mvnw.cmd spring-boot:run
+Open Swagger: http://localhost:8080/swagger-ui/index.html
+H2 Console: http://localhost:8080/h2-console (JDBC URL: jdbc:h2:mem:ledgerdb)
 
 🚀 Future Scope
-
-PostgreSQL Integration: Transitioning to persistent storage for production use.
-
-Microservices Deployment: Dockerizing the module for scaling within the Atomix system.
+Scalability Testing: Performing load tests to scale beyond current concurrency limits.
+PostgreSQL Integration: Moving to a persistent database for production-level storage.
