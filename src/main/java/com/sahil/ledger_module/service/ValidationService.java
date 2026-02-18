@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sahil.ledger_module.exception.InconsistentDataException;
 import com.sahil.ledger_module.repository.AccountRepository;
@@ -14,6 +15,7 @@ public class ValidationService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Transactional
     public void validateTransaction(Map<String, Double> entries) {
      
         double totalSum = entries.values().stream()
