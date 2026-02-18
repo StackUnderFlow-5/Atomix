@@ -1,7 +1,8 @@
 Atomix — Distributed Ledger Module
 
 📌 Overview
-Atomix is a specialized backend engine built to manage financial transactions between accounts while maintaining a strict audit trail. It functions as a "Double-Entry" system that automates the movement of funds and records every transaction in a permanent history table.
+Atomix is a specialized backend engine built to manage financial transactions between accounts while maintaining a strict audit trail.
+It functions as a "Double-Entry" system that automates the movement of funds and records every transaction in a permanent history table.
 
 Built using:
 Java 21 & Spring Boot 3
