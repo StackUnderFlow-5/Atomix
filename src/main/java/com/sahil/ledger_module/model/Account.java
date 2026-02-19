@@ -1,5 +1,7 @@
 package com.sahil.ledger_module.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,5 +20,5 @@ public class Account {
     private Long id;
     
     private String accountName;
-    private Double balance;
+    private BigDecimal balance;
 }

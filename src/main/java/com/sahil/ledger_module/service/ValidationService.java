@@ -1,5 +1,6 @@
 package com.sahil.ledger_module.service;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +17,23 @@ public class ValidationService {
     private AccountRepository accountRepository;
 
     @Transactional
-    public void validateTransaction(Map<String, Double> entries) {
+    public void validateTransaction(Map<String, BigDecimal> entries) { // Changed Double to BigDecimal
      
-        double totalSum = entries.values().stream()
-                .mapToDouble(Double::doubleValue)
-                .sum();
+        // Summing BigDecimals using Stream
+        BigDecimal totalSum = entries.values().stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        if (totalSum != 0) {
+        if (totalSum.compareTo(BigDecimal.ZERO) != 0) {
             throw new InconsistentDataException("Imbalance: Sum is " + totalSum);
         }
 
-        for (Map.Entry<String, Double> entry : entries.entrySet()) {
+        for (Map.Entry<String, BigDecimal> entry : entries.entrySet()) {
             String name = entry.getKey();
-            Double amount = entry.getValue();
+            BigDecimal amount = entry.getValue();
 
             accountRepository.findByAccountName(name).ifPresent(account -> {
-                if (account.getBalance() + amount < 0) {
+                // Using .add() and .compareTo() for BigDecimal safety
+                if (account.getBalance().add(amount).compareTo(BigDecimal.ZERO) < 0) {
                     throw new InconsistentDataException("Security Alert: Account [" + name + "] cannot have a negative balance!");
                 }
             });

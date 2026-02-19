@@ -14,7 +14,12 @@ import jakarta.persistence.LockModeType;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
+
+    // Keep this for LedgerService ONLY (updates/transfers)
     @Lock(LockModeType.PESSIMISTIC_WRITE) 
     @Query("SELECT a FROM Account a WHERE a.accountName = :accountName") 
-    Optional<Account> findByAccountName(@Param("accountName") String accountName); 
+    Optional<Account> findByAccountNameWithLock(@Param("accountName") String accountName);
+
+    // Use this for LedgerController (simple viewing)
+    Optional<Account> findByAccountName(String accountName); 
 }
